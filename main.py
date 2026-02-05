@@ -251,8 +251,15 @@ class YouTubeDownloaderApp(ctk.CTk):
             elif download_type == "video":
                 res = self.option_res.get().replace("p", "")
                 fmt = self.option_fmt.get()
+                
+                if fmt == "mp4":
+                    # Prioriza áudio m4a para MP4 para garantir compatibilidade de som
+                    format_str = f'bestvideo[height<={res}]+bestaudio[ext=m4a]/bestvideo[height<={res}]+bestaudio/best[height<={res}]'
+                else:
+                    format_str = f'bestvideo[height<={res}]+bestaudio/best[height<={res}]'
+
                 ydl_opts.update({
-                    'format': f'bestvideo[height<={res}]+bestaudio/best[height<={res}]',
+                    'format': format_str,
                     'merge_output_format': fmt,
                 })
             elif download_type == "thumbnail":
